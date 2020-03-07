@@ -1,0 +1,91 @@
+﻿<Window x:Class="YatskivLab02.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:YatskivLab02"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Text="Name" 
+            VerticalAlignment="Top"
+            Width="65" 
+            Height="20" 
+            Margin="280,75,0,0"/>
+
+        <TextBox
+            HorizontalAlignment="Left" 
+            Height="23" 
+            Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            VerticalAlignment="Top" 
+            Width="120" 
+            Margin="360,75,0,0"/>
+
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Text="Surname" 
+            VerticalAlignment="Top"
+            Width="65" 
+            Height="20"    
+            Margin="280,115,0,0"/>
+
+        <TextBox 
+            HorizontalAlignment="Left" 
+            Height="23" 
+            Text="{Binding Surname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            VerticalAlignment="Top" 
+            Width="120" 
+            Margin="360,115,0,0"/>
+
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Text="Email" 
+            VerticalAlignment="Top"
+            Width="65" 
+            Height="20"    
+            Margin="280,155,0,0"/>
+
+        <TextBox 
+            HorizontalAlignment="Left" 
+            Height="23" 
+            Text="{Binding Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            VerticalAlignment="Top" 
+            Width="120" 
+            Margin="360,155,0,0"/>
+
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Text="Birthday" 
+            VerticalAlignment="Top"
+            Width="65" 
+            Height="20"    
+            Margin="280,195,0,0"/>
+        <DatePicker 
+            SelectedDate="{Binding Birthday, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+            HorizontalAlignment="Left" 
+            Margin="360,195,0,0" 
+            VerticalAlignment="Top" 
+            Width="120"/>
+
+        <Button 
+            Command="{Binding ProceedCommand}"
+            Content="Proceed" 
+            HorizontalAlignment="Left" 
+            Margin="350,265,0,0" 
+            VerticalAlignment="Top" 
+            Width="75"/>
+        
+        <TextBlock 
+            HorizontalAlignment="Left" 
+            Margin="25,335,0,0" 
+            TextWrapping="Wrap" 
+            Text="{Binding ResultMessage, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+            VerticalAlignment="Top" 
+            Width="759" 
+            Height="65"/>
+
+
+    </Grid>
+</Window>
