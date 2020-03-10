@@ -46,7 +46,7 @@ namespace YatskivLab02.ViewModels
             }
         }
 
-        public DateTime Birtday
+        public DateTime Birthday
         {
             get { return _person.Birthday; }
             set
@@ -70,22 +70,41 @@ namespace YatskivLab02.ViewModels
 
         public MainViewModel()
         {
-            _person = new Person();
+            try
+            {
+                _person = new Person();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
 
         }
 
         public RelayCommand<object> ProceedCommand
-        { 
+        {
             get
             {
                 return _proceedCommand ?? (_proceedCommand = new RelayCommand<object>(
                            o =>
                            {
-                               MessageBox.Show($"Succes");
+                               try
+                               {
+                                   string adulty = _person.IsAdult ? "adult" : "not adult";
+                                   string hb = _person.IsBirthday ? "Happy Birthday!" : "";
+                                   ResultMessage = $"{Name} {Surname}, {Email}, {Birthday.ToLongDateString()}\n" +
+                                   $"Person is {adulty}, Sun sign is {_person.SunSign}, Chinese sign is {_person.ChineseSign}" +
+                                   $"\n{hb}";
+                               }
+                               catch (Exception e)
+                               {
+                                   MessageBox.Show(e.Message);
+                               }
+                               finally
+                               {
+                                   MessageBox.Show($"Succes");
 
-                               string adulty = _person.IsAdult ? "adult" : "not adult";
-                               string hb = _person.IsBirthday ? "Happy Birthday!" : "";
-                               ResultMessage = $"{Name} {Surname}, {Email}, {Birtday.ToLongDateString()}\nPerson is {adulty}, SunSign is {_person.SunSign}\n{hb}";
+                               }
 
                            }, o => CanExecuteCommand()));
             }

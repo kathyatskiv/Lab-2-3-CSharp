@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Windows;
 using System.Threading.Tasks;
 
 namespace YatskivLab02.Models
@@ -52,6 +50,15 @@ namespace YatskivLab02.Models
             set
             {
                 _birthday = value;
+
+                try
+                {
+                    countAge();
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
             }
         }
 
@@ -82,6 +89,15 @@ namespace YatskivLab02.Models
                 _sunSign = value;
             }
         }
+
+        public string ChineseSign
+        {
+            get { return _chineseSign; }
+            private set
+            {
+                _chineseSign = value;
+            }
+        }
         #endregion
 
         #region Constructors
@@ -92,7 +108,8 @@ namespace YatskivLab02.Models
             Email = "";
             Birthday = DateTime.Today;
 
-            compute();
+            countAge();
+
         }
 
         internal Person(string name, string surname, string email, DateTime birthday )
@@ -102,7 +119,7 @@ namespace YatskivLab02.Models
             Email = email;
             Birthday = birthday;
 
-            compute();
+            countAge();
         }
 
         internal Person(string name, string surname, string email)
@@ -110,9 +127,8 @@ namespace YatskivLab02.Models
             Name = name;
             Surname = surname;
             Email = email;
-            Birthday = DateTime.Today;
 
-            compute();
+            countAge();
         }
 
         internal Person(string name, string surname, DateTime birthday)
@@ -122,53 +138,106 @@ namespace YatskivLab02.Models
             Email = null;
             Birthday = birthday;
 
-            compute();
+            countAge();
         }
         #endregion
 
-        private void compute()
+        async private void compute()
         {
-            countAge();
-            setSunSign();
+            await Task.Run(() =>
+            {
+                try
+                {
+                    countAge();
+                }
+                catch(Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                }
+                finally
+                {
+                    setSunSign();
+                    setChineseSign();
+                }
+        
+            });
+
         }
 
         private void countAge()
         {
             DateTime now = DateTime.Today;
 
-           _age = now.Month > Birthday.Month ? now.Year - Birthday.Year
+            _age = now.Month > Birthday.Month ? now.Year - Birthday.Year
                    : now.Month == Birthday.Month && now.Day >= Birthday.Day ? now.Year - Birthday.Year
                    : now.Year - Birthday.Year - 1;
 
-            if (_age < 0 || _age > 135) _age = -1;
+            if (_age > 135 || _age < 0) throw new ArgumentException("Error! Wrong date");
         }
 
         private enum WestZodiac
         {
-            Capricornus = 27,
-            Aquarius = 24,
-            Pisces = 38,
-            Aries = 25,
-            Taurus = 37,
-            Gemini = 31,
-            Cancer = 20,
-            Leo = 37,
-            Virgo = 45,
-            Libra = 7,
-            Sagittarius = 32
+            Capricornus = 19,
+            Aquarius = 47,
+            Pisces = 71,
+            Aries = 109,
+            Taurus = 134,
+            Gemini = 171,
+            Cancer = 202,
+            Leo = 222,
+            Virgo = 259,
+            Libra = 205,
+            Scorpio = 327,
+            Sagittarius = 352
         }
 
-        private void setSunSign()
+        private enum ChineseZodiac
         {
-            int cur = 19;
+            Monkey = 0,
+            Cock,
+            Dog,
+            Pig,
+            Rat,
+            Ox,
+            Tiger,
+            Heir,
+            Dragon,
+            Snake,
+            Horse,
+            Goal
+        }
+
+    private void setSunSign()
+        {
             int counter = 0;
 
             foreach(int zodiac in Enum.GetValues(typeof(WestZodiac)))
             {
-                if (cur >= Birthday.DayOfYear) SunSign = (Enum.GetNames(typeof(WestZodiac)))[counter];
-                cur += zodiac;
+                if (zodiac >= Birthday.DayOfYear)
+                {
+                    SunSign = (Enum.GetNames(typeof(WestZodiac)))[counter];
+                    break;
+                }
+
                 counter++;
             }
         }
+
+        private void setChineseSign()
+        {
+            int counter = 0;
+
+            foreach (int zodiac in Enum.GetValues(typeof(ChineseZodiac)))
+            {
+                if (Birthday.Year % 12 == zodiac)
+                {
+                    ChineseSign = (Enum.GetNames(typeof(ChineseZodiac)))[counter];
+                    break;
+                }
+
+                counter++;
+            }
+        }
+
     }
 }
